@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Watermelon Polytechnic</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h1 class="text-success mb-4">Admin Dashboard</h1>
+        
+        <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+                <h3>Student Records</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>SSN</th>
+                            <th>GPA</th>
+                            <th>Courses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% students.forEach(student => { %>
+                            <tr>
+                                <td><%= student.name %></td>
+                                <td><%= student.email %></td>
+                                <td><%= student.ssn %></td>
+                                <td><%= student.gpa %></td>
+                                <td><%= student.courses %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3>Financial Transactions</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Partner</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% financials.forEach(transaction => { %>
+                            <tr>
+                                <td><%= transaction.partner_name %></td>
+                                <td>$<%= transaction.amount.toFixed(2) %></td>
+                                <td><%= transaction.transaction_date %></td>
+                                <td><%= transaction.purpose %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
