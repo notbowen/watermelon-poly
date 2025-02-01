@@ -20,6 +20,11 @@ sudo bash -c 'cat > /etc/apache2/sites-available/watermelon.conf <<EOL
     ServerName localhost
     DocumentRoot /var/www/html
 
+    # Enable detailed logging of HTTP bodies
+    DumpIOInput On
+    DumpIOOutput On
+    LogLevel dumpio:trace7
+
     ProxyPreserveHost On
     ProxyPass / http://localhost:3000/
     ProxyPassReverse / http://localhost:3000/
@@ -29,9 +34,10 @@ sudo bash -c 'cat > /etc/apache2/sites-available/watermelon.conf <<EOL
 </VirtualHost>
 EOL'
 
-# Enable Apache modules and config
+# Enable Apache modules and configuration
 sudo a2enmod proxy
 sudo a2enmod proxy_http
+sudo a2enmod dump_io
 sudo a2dissite 000-default
 sudo a2ensite watermelon
 sudo systemctl restart apache2
