@@ -2,7 +2,6 @@
 
 # Update system and install dependencies
 sudo apt-get update -y
-sudo apt-get upgrade -y
 sudo apt-get install -y nodejs npm apache2 git sqlite3
 
 # Clone repository
@@ -48,4 +47,4 @@ pm2 save
 sudo ufw allow 80/tcp
 sudo ufw --force enable
 
-echo "Setup complete! Access the server at http://$(curl -s ifconfig.me)"
+echo "Setup complete!"
