@@ -14,10 +14,10 @@ npm install
 # Initialize database
 sqlite3 watermelon.db < database.sql
 
-# Configure Apache
+# Configure Apache VirtualHost for watermelon-poly.edu
 sudo bash -c 'cat > /etc/apache2/sites-available/watermelon.conf <<EOL
 <VirtualHost *:80>
-    ServerName localhost
+    ServerName watermelon-poly.edu
     DocumentRoot /var/www/html
 
     # Enable detailed logging of HTTP bodies
@@ -35,21 +35,18 @@ sudo bash -c 'cat > /etc/apache2/sites-available/watermelon.conf <<EOL
 EOL'
 
 # Enable Apache modules and configuration
-sudo a2enmod proxy
-sudo a2enmod proxy_http
-sudo a2enmod dump_io
+sudo a2enmod proxy proxy_http dump_io
 sudo a2dissite 000-default
 sudo a2ensite watermelon
 sudo systemctl restart apache2
 
-# Install PM2 and start server
+# Install PM2, start server, and configure PM2 to auto-start on boot
 sudo npm install -g pm2
-pm2 start server.js
-pm2 startup systemd
-sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $USER --hp /home/$USER
+pm2 start server.js --name watermelon-poly
+pm2 startup systemd -u $(whoami) --hp /home/$(whoami)
 pm2 save
 
-# Configure firewall
+# Configure firewall to allow HTTP traffic
 sudo ufw allow 80/tcp
 sudo ufw --force enable
 
