@@ -1,8 +1,22 @@
 #!/bin/bash
 
-# Update system and install dependencies
+# Update system and install dependencies (including OpenSSH server)
 sudo apt-get update -y
-sudo apt-get install -y nodejs npm apache2 git sqlite3
+sudo apt-get install -y nodejs npm apache2 git sqlite3 openssh-server
+
+# Configure SSH: disable password and challenge–response authentication to allow only key-based logins
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/#ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
+# Ensure public key authentication is enabled (usually the default)
+sudo sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+
+# Restart SSH to apply the new configuration
+sudo systemctl restart ssh
+
+# (Optional) Enable SSH service to start on boot
+sudo systemctl enable ssh
 
 # Clone repository
 git clone https://github.com/notbowen/watermelon-poly.git
@@ -46,8 +60,9 @@ pm2 start server.js
 pm2 startup systemd -u $(whoami) --hp /home/$(whoami)
 pm2 save
 
-# Configure firewall to allow HTTP traffic
+# Configure firewall to allow HTTP (port 80) and SSH (port 22) traffic
 sudo ufw allow 80/tcp
+sudo ufw allow 22/tcp
 sudo ufw --force enable
 
 echo "Setup complete!"
