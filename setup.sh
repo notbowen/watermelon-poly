@@ -14,10 +14,10 @@ npm install
 # Initialize database
 sqlite3 watermelon.db < database.sql
 
-# Configure Apache VirtualHost for watermelon-poly.edu
+# Configure Apache VirtualHost for watermelon.poly.edu
 sudo bash -c 'cat > /etc/apache2/sites-available/watermelon.conf <<EOL
 <VirtualHost *:80>
-    ServerName watermelon-poly.edu
+    ServerName watermelon.poly.edu
     DocumentRoot /var/www/html
 
     # Enable detailed logging of HTTP bodies
@@ -42,7 +42,7 @@ sudo systemctl restart apache2
 
 # Install PM2, start server, and configure PM2 to auto-start on boot
 sudo npm install -g pm2
-pm2 start server.js --name watermelon-poly
+pm2 start server.js
 pm2 startup systemd -u $(whoami) --hp /home/$(whoami)
 pm2 save
 
